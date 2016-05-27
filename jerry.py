@@ -97,10 +97,12 @@ df = df.rename(columns={'tj_time': 'dest_tj_time'})
 
 df = pd.merge(left=df, right=df_weather, how='left', left_on='start_district_hash', right_on='district_hash')
 df = df.rename(columns={'tj_level': 'start_tj_level'})
+df = df.rename(columns={'tj_time': 'start_tj_time'})
 df = pd.merge(left=df, right=df_weather, how='left', left_on='dest_district_hash', right_on='district_hash')
+df = df.rename(columns={'tj_level': 'dest_tj_level'})
 df = df.rename(columns={'tj_time': 'dest_tj_time'})
 
-
+# merge the data to the weather to the closest time
 e, l = np.unique(df_weather['Time'], return_index=True)
 e = np.r_[-np.inf, e + np.ediff1d(e, to_end=np.inf)/2]
 df['temp'] = pd.cut(df['start_tj_level'], bins=e, labels=df_weather.index[l])
